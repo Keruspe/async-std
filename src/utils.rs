@@ -61,7 +61,7 @@ pub(crate) trait Context {
 
 #[cfg(all(not(target_os = "unknown"), feature = "default"))]
 mod timer {
-    pub type Timer = smol::Timer;
+    pub type Timer = async_io::Timer;
 }
 
 #[cfg(any(feature = "unstable", feature = "default"))]
@@ -69,7 +69,7 @@ pub(crate) fn timer_after(dur: std::time::Duration) -> timer::Timer {
     #[cfg(not(target_os = "unknown"))]
     once_cell::sync::Lazy::force(&crate::rt::RUNTIME);
 
-    Timer::after(dur)
+    Timer::new(dur)
 }
 
 #[cfg(any(
